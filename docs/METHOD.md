@@ -26,7 +26,7 @@ Let $H_l$ be the hidden sequence from SSL layer $l$. Each layer passes through t
 
 $$
 U_l=A_l(H_l)+R_l(H_l),\qquad
-R_l(H_l)=W_{l,2}\operatorname{GELU}(W_{l,1}\operatorname{LN}(H_l)).
+R_l(H_l)=W_{l,2}\mathrm{GELU}(W_{l,1}\mathrm{LN}(H_l)).
 $$
 
 The projected layer sequences are stacked along a depth axis. A depthwise two-dimensional convolution exchanges local evidence across depth and time before attentive statistics pooling. Zero initialization preserves the pretrained speaker geometry at the start of optimization and lets the residual learn only the correction required by the target domains.
@@ -36,11 +36,11 @@ The projected layer sequences are stacked along a depth axis. A depthwise two-di
 ReDimNet2 provides an acoustic frame sequence $A$, while the wide SSL head provides $U$. Four-head cross attention treats SSL frames as queries and acoustic frames as keys and values:
 
 $$
-Q=W_Q\operatorname{LN}(U),\qquad [K,V]=W_{KV}\operatorname{LN}(A),
+Q=W_Q\mathrm{LN}(U),\qquad [K,V]=W_{KV}\mathrm{LN}(A),
 $$
 
 $$
-U'=U+W_O\operatorname{softmax}\left(\frac{QK^\top}{\sqrt{d}}\right)V.
+U'=U+W_O\mathrm{softmax}\left(\frac{QK^\top}{\sqrt{d}}\right)V.
 $$
 
 The output projection $W_O$ is initialized to zero. The cross-encoder branch therefore begins as the wide residual model and learns a stable acoustic correction without disrupting the initial embedding space.
@@ -50,7 +50,7 @@ The output projection $W_O$ is initialized to zero. The cross-encoder branch the
 Every branch is normalized before fusion. For the original GRL representation $g$ and cross-encoder representation $c$, the shared slot is
 
 $$
-z_{gc}=\operatorname{norm}\left(\operatorname{norm}(g)+\operatorname{norm}(c)\right).
+z_{gc}=\mathrm{norm}\left(\mathrm{norm}(g)+\mathrm{norm}(c)\right).
 $$
 
 The final embedding concatenates a compressed geometry view, ReDimNet2, the contextual SSL view, $z_{gc}$, and the wide residual view with energy weights $0.20,0.40,0.15,0.15,0.10$, respectively:
