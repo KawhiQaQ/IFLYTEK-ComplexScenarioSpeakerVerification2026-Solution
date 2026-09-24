@@ -102,7 +102,7 @@ python scripts/infer.py \
 | SpeechOcean762 | 完整数据包 | [OpenSLR 101](https://www.openslr.org/101/) | `data/processed/speechocean/` |
 | ST-CMDS | `ST-CMDS-20170001_1-OS` | [OpenSLR 38](https://www.openslr.org/38/) | `data/processed/stcmds/ST-CMDS-20170001_1-OS/` |
 | ChildMandarin | `new_data/train.tar` | [Hugging Face](https://huggingface.co/datasets/BAAI/ChildMandarin) | `data/raw/childmandarin/train/` |
-| Common Voice 17.0 | `zh-CN` 的 26 个 `validation` Parquet 分片 | [17.0 数据卡](https://huggingface.co/datasets/mozilla-foundation/common_voice_17_0)、[Mozilla Data Collective](https://mozilladatacollective.com/datasets) | `data/raw/commonvoice17-zhcn-validation/` |
+| Common Voice 17.0 | `zh-CN` 的 26 个 `validation` Parquet 分片 | [固定公开快照](https://huggingface.co/datasets/masuidrive/cv-corpus-17.0-zh-CN-client_id-grouped)、[17.0 发布说明](https://discourse.mozilla.org/t/dataset-17-release/128837) | `data/raw/commonvoice17-zhcn-validation/` |
 
 下载并解压三个可直接获取的公开数据集：
 
@@ -138,9 +138,12 @@ tar -xf data/downloads/childmandarin/new_data/train.tar \
   -C data/raw/childmandarin
 ```
 
-Common Voice 必须使用 **17.0、`zh-CN`、`validation`**，新版语料不能复现固定划分。下载后，将 `validation_0.parquet` 至 `validation_25.parquet` 放入 `data/raw/commonvoice17-zhcn-validation/`，再生成发布方案使用的 600 说话人训练子集：
+Common Voice 必须使用 **17.0、`zh-CN`、`validation`**，新版语料不能复现固定划分。下面的下载脚本固定到公开 CC0 快照的具体 revision，并校验全部 26 个分片的文件大小和 SHA-256；在中国大陆访问困难时可通过 `HF_ENDPOINT` 指定兼容的 Hugging Face 镜像。下载完成后，再生成发布方案使用的 600 说话人训练子集：
 
 ```bash
+python scripts/download_commonvoice17.py
+# 可选：HF_ENDPOINT=https://hf-mirror.com python scripts/download_commonvoice17.py
+
 python scripts/prepare_commonvoice17.py \
   --root data/raw/commonvoice17-zhcn-validation \
   --output-root data/processed/commonvoice17-train \
@@ -157,7 +160,8 @@ data/
 │   ├── speechocean/
 │   └── stcmds/ST-CMDS-20170001_1-OS/
 └── raw/
-    └── childmandarin/train/
+    ├── childmandarin/train/
+    └── commonvoice17-zhcn-validation/
 ```
 
 ### 5. 自行训练

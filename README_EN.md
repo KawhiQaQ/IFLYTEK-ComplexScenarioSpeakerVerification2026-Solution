@@ -102,7 +102,7 @@ Training uses only the subsets listed below. Review and comply with each dataset
 | SpeechOcean762 | Complete archive | [OpenSLR 101](https://www.openslr.org/101/) | `data/processed/speechocean/` |
 | ST-CMDS | `ST-CMDS-20170001_1-OS` | [OpenSLR 38](https://www.openslr.org/38/) | `data/processed/stcmds/ST-CMDS-20170001_1-OS/` |
 | ChildMandarin | `new_data/train.tar` | [Hugging Face](https://huggingface.co/datasets/BAAI/ChildMandarin) | `data/raw/childmandarin/train/` |
-| Common Voice 17.0 | All 26 `validation` Parquet shards for `zh-CN` | [17.0 dataset card](https://huggingface.co/datasets/mozilla-foundation/common_voice_17_0), [Mozilla Data Collective](https://mozilladatacollective.com/datasets) | `data/raw/commonvoice17-zhcn-validation/` |
+| Common Voice 17.0 | All 26 `validation` Parquet shards for `zh-CN` | [Pinned public snapshot](https://huggingface.co/datasets/masuidrive/cv-corpus-17.0-zh-CN-client_id-grouped), [17.0 release notes](https://discourse.mozilla.org/t/dataset-17-release/128837) | `data/raw/commonvoice17-zhcn-validation/` |
 
 Download and extract the three directly accessible public datasets:
 
@@ -138,9 +138,12 @@ tar -xf data/downloads/childmandarin/new_data/train.tar \
   -C data/raw/childmandarin
 ```
 
-Common Voice must be release **17.0**, locale **`zh-CN`**, split **`validation`**. A newer release will not reproduce the fixed split. Place `validation_0.parquet` through `validation_25.parquet` in `data/raw/commonvoice17-zhcn-validation/`, then build the released 600-speaker training subset:
+Common Voice must be release **17.0**, locale **`zh-CN`**, split **`validation`**. A newer release will not reproduce the fixed split. The downloader below pins an exact revision of a public CC0 snapshot and checks the size and SHA-256 of all 26 shards. If Hugging Face is inaccessible from your region, set `HF_ENDPOINT` to a compatible mirror. After downloading, build the released 600-speaker training subset:
 
 ```bash
+python scripts/download_commonvoice17.py
+# Optional: HF_ENDPOINT=https://hf-mirror.com python scripts/download_commonvoice17.py
+
 python scripts/prepare_commonvoice17.py \
   --root data/raw/commonvoice17-zhcn-validation \
   --output-root data/processed/commonvoice17-train \
@@ -157,7 +160,8 @@ data/
 │   ├── speechocean/
 │   └── stcmds/ST-CMDS-20170001_1-OS/
 └── raw/
-    └── childmandarin/train/
+    ├── childmandarin/train/
+    └── commonvoice17-zhcn-validation/
 ```
 
 ### 5. Training
