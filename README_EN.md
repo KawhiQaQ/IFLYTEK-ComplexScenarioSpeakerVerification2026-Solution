@@ -10,8 +10,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.8-3776AB?logo=python&logoColor=white" alt="Python 3.8">
   <img src="https://img.shields.io/badge/PyTorch-2.4.1-EE4C2C?logo=pytorch&logoColor=white" alt="PyTorch 2.4.1">
-  <img src="https://img.shields.io/badge/Semifinal%20LB-93.40746-7B3FC6" alt="Semifinal leaderboard score 93.40746">
-  <img src="https://img.shields.io/badge/Embedding-4096D-2EA44F" alt="4096-dimensional embedding">
   <img src="https://img.shields.io/badge/License-MIT-1683BB" alt="MIT License">
 </p>
 
