@@ -21,8 +21,6 @@
 
 This repository contains the training and inference code for our final competition solution. The task extracts a speaker representation from each utterance and uses cosine similarity to verify whether enrollment and test speech belong to the same speaker. The evaluation covers child speech, same-gender interference, near/far-field conditions, device mismatch, and 0.5- and 1-second utterances.
 
-The final model produces a 4,096-dimensional embedding and achieved **93.40746** on the semifinal public leaderboard. Inference uses only the current waveform; it does not use filenames, trial pairs, scenario labels, thresholds, or test-set statistics.
-
 ## Method
 
 We use a **multi-encoder sphere-fusion speaker model** with four main components:
