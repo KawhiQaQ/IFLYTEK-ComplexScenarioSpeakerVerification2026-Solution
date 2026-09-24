@@ -1,0 +1,9 @@
+Linux jupyter-xclc6d6g2m31g080 6.8.0-138-generic #138~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Fri Aug  7 13:43:15 UTC  x86_64 x86_64 x86_64 GNU/Linux
+
+Python 3.8.20
+torch=2.4.1+cu121
+torchaudio=2.4.1+cu121
+transformers=4.46.3
+numpy=1.24.4
+cuda_build=12.1
+gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0

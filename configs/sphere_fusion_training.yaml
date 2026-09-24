@@ -1,0 +1,28 @@
+seed: 823
+head_steps: 20
+steps: 1200
+speakers_per_batch: 8
+workers: 8
+model_lr: 0.00002
+head_lr: 0.0005
+weight_decay: 0.0001
+margin: 0.2
+scale: 30.0
+classification_weight: 0.30
+prototype_weight: 1.0
+hard_weight: 1.0
+completion_weight: 0.75
+duration_weight: 0.75
+coordinate_weight: 2.0
+affinity_weight: 1.0
+prototype_scale: 20.0
+prototype_margin: 0.25
+hard_margin: 0.15
+duration_probabilities:
+  0.5: 0.40
+  1.0: 0.35
+  2.0: 0.15
+  3.0: 0.10
+
+hard_neighbor_count: 16
+hard_sample_topk: 8

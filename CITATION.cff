@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite it as below."
+title: "Multi-Encoder Sphere Fusion for Complex-Scenario Speaker Verification"
+type: software
+authors:
+  - name: "Miwu Team"
+version: 1.0.0
+date-released: 2026-09-24
+license: MIT

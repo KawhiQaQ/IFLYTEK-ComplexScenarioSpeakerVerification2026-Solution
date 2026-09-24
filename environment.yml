@@ -1,0 +1,7 @@
+name: miwu
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8
+  - pip
+# Install GPU dependencies with scripts/bootstrap.sh after creating the prefix.

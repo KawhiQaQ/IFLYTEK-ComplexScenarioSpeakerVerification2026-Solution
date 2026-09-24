@@ -1,0 +1,13 @@
+* text=auto
+*.py text eol=lf
+*.sh text eol=lf
+*.md text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+*.ckpt binary
+*.pt binary
+*.npz binary
+*.wav binary
+*.tar.gz binary
+*.zip binary

@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "miwu-speaker-verification"
+version = "1.0.0"
+description = "Multi-encoder sphere-fusion solution for complex-scenario speaker verification"
+readme = "README_EN.md"
+requires-python = ">=3.8,<3.12"
+license = {text = "MIT"}
+authors = [{name = "Miwu Team"}]
+
+[tool.setuptools.packages.find]
+where = ["src"]
