@@ -92,9 +92,62 @@ python scripts/infer.py \
 
 The command writes `outputs/inference/submit.zip`. Each WAV maps to an NPZ at the same relative path, with a finite `float32[4096]` array under the `embedding` key.
 
-### 4. Training
+### 4. Data Preparation
 
-Prepare the training corpora using the following layout:
+Training uses only the subsets listed below. Review and comply with each dataset's license and terms before downloading or using it.
+
+| Dataset | Required download | Source | Final path |
+| --- | --- | --- | --- |
+| 3D-Speaker | `test.tar.gz` and `3dspeaker_files.tar.gz` | [Project page](https://3dspeaker.github.io/) | `data/processed/3dspeaker/` |
+| SpeechOcean762 | Complete archive | [OpenSLR 101](https://www.openslr.org/101/) | `data/processed/speechocean/` |
+| ST-CMDS | `ST-CMDS-20170001_1-OS` | [OpenSLR 38](https://www.openslr.org/38/) | `data/processed/stcmds/ST-CMDS-20170001_1-OS/` |
+| ChildMandarin | `new_data/train.tar` | [Hugging Face](https://huggingface.co/datasets/BAAI/ChildMandarin) | `data/raw/childmandarin/train/` |
+| Common Voice 17.0 | All 26 `validation` Parquet shards for `zh-CN` | [17.0 dataset card](https://huggingface.co/datasets/mozilla-foundation/common_voice_17_0), [Mozilla Data Collective](https://mozilladatacollective.com/datasets) | `data/raw/commonvoice17-zhcn-validation/` |
+
+Download and extract the three directly accessible public datasets:
+
+```bash
+mkdir -p data/downloads data/processed/3dspeaker data/processed/stcmds
+
+curl -L https://speech-lab-share-data.oss-cn-shanghai.aliyuncs.com/3D-Speaker/test.tar.gz \
+  -o data/downloads/3dspeaker-test.tar.gz
+curl -L https://speech-lab-share-data.oss-cn-shanghai.aliyuncs.com/3D-Speaker/3dspeaker_files.tar.gz \
+  -o data/downloads/3dspeaker_files.tar.gz
+tar -xzf data/downloads/3dspeaker-test.tar.gz -C data/processed/3dspeaker
+tar -xzf data/downloads/3dspeaker_files.tar.gz -C data/processed/3dspeaker
+
+curl -L https://www.openslr.org/resources/101/speechocean762.tar.gz \
+  -o data/downloads/speechocean762.tar.gz
+tar -xzf data/downloads/speechocean762.tar.gz -C data/processed
+mv data/processed/speechocean762 data/processed/speechocean
+
+curl -L https://www.openslr.org/resources/38/ST-CMDS-20170001_1-OS.tar.gz \
+  -o data/downloads/ST-CMDS-20170001_1-OS.tar.gz
+tar -xzf data/downloads/ST-CMDS-20170001_1-OS.tar.gz \
+  -C data/processed/stcmds
+```
+
+ChildMandarin is gated. Accept its terms on the dataset page, authenticate, and download only the training archive:
+
+```bash
+huggingface-cli login
+huggingface-cli download BAAI/ChildMandarin new_data/train.tar \
+  --repo-type dataset --local-dir data/downloads/childmandarin
+mkdir -p data/raw/childmandarin
+tar -xf data/downloads/childmandarin/new_data/train.tar \
+  -C data/raw/childmandarin
+```
+
+Common Voice must be release **17.0**, locale **`zh-CN`**, split **`validation`**. A newer release will not reproduce the fixed split. Place `validation_0.parquet` through `validation_25.parquet` in `data/raw/commonvoice17-zhcn-validation/`, then build the released 600-speaker training subset:
+
+```bash
+python scripts/prepare_commonvoice17.py \
+  --root data/raw/commonvoice17-zhcn-validation \
+  --output-root data/processed/commonvoice17-train \
+  --split-root outputs/commonvoice17
+```
+
+The resulting layout must be:
 
 ```text
 data/
@@ -106,6 +159,8 @@ data/
 └── raw/
     └── childmandarin/train/
 ```
+
+### 5. Training
 
 Validate all paths and print the training plan:
 

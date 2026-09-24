@@ -92,9 +92,62 @@ python scripts/infer.py \
 
 输出为 `outputs/inference/submit.zip`。每个 WAV 对应一个同相对路径的 NPZ 文件，其中 `embedding` 为有限的 `float32[4096]` 向量。
 
-### 4. 自行训练
+### 4. 数据准备
 
-准备以下训练数据目录：
+训练仅使用下表所列子集。下载和使用数据前，请先阅读并遵守各数据集的许可证与使用条款。
+
+| 数据集 | 下载内容 | 下载地址 | 最终目录 |
+| --- | --- | --- | --- |
+| 3D-Speaker | `test.tar.gz`、`3dspeaker_files.tar.gz` | [项目主页](https://3dspeaker.github.io/) | `data/processed/3dspeaker/` |
+| SpeechOcean762 | 完整数据包 | [OpenSLR 101](https://www.openslr.org/101/) | `data/processed/speechocean/` |
+| ST-CMDS | `ST-CMDS-20170001_1-OS` | [OpenSLR 38](https://www.openslr.org/38/) | `data/processed/stcmds/ST-CMDS-20170001_1-OS/` |
+| ChildMandarin | `new_data/train.tar` | [Hugging Face](https://huggingface.co/datasets/BAAI/ChildMandarin) | `data/raw/childmandarin/train/` |
+| Common Voice 17.0 | `zh-CN` 的 26 个 `validation` Parquet 分片 | [17.0 数据卡](https://huggingface.co/datasets/mozilla-foundation/common_voice_17_0)、[Mozilla Data Collective](https://mozilladatacollective.com/datasets) | `data/raw/commonvoice17-zhcn-validation/` |
+
+下载并解压三个可直接获取的公开数据集：
+
+```bash
+mkdir -p data/downloads data/processed/3dspeaker data/processed/stcmds
+
+curl -L https://speech-lab-share-data.oss-cn-shanghai.aliyuncs.com/3D-Speaker/test.tar.gz \
+  -o data/downloads/3dspeaker-test.tar.gz
+curl -L https://speech-lab-share-data.oss-cn-shanghai.aliyuncs.com/3D-Speaker/3dspeaker_files.tar.gz \
+  -o data/downloads/3dspeaker_files.tar.gz
+tar -xzf data/downloads/3dspeaker-test.tar.gz -C data/processed/3dspeaker
+tar -xzf data/downloads/3dspeaker_files.tar.gz -C data/processed/3dspeaker
+
+curl -L https://www.openslr.org/resources/101/speechocean762.tar.gz \
+  -o data/downloads/speechocean762.tar.gz
+tar -xzf data/downloads/speechocean762.tar.gz -C data/processed
+mv data/processed/speechocean762 data/processed/speechocean
+
+curl -L https://www.openslr.org/resources/38/ST-CMDS-20170001_1-OS.tar.gz \
+  -o data/downloads/ST-CMDS-20170001_1-OS.tar.gz
+tar -xzf data/downloads/ST-CMDS-20170001_1-OS.tar.gz \
+  -C data/processed/stcmds
+```
+
+ChildMandarin 为受限数据集。先在数据页面接受条款，再登录并仅下载训练包：
+
+```bash
+huggingface-cli login
+huggingface-cli download BAAI/ChildMandarin new_data/train.tar \
+  --repo-type dataset --local-dir data/downloads/childmandarin
+mkdir -p data/raw/childmandarin
+tar -xf data/downloads/childmandarin/new_data/train.tar \
+  -C data/raw/childmandarin
+```
+
+Common Voice 必须使用 **17.0、`zh-CN`、`validation`**，新版语料不能复现固定划分。下载后，将 `validation_0.parquet` 至 `validation_25.parquet` 放入 `data/raw/commonvoice17-zhcn-validation/`，再生成发布方案使用的 600 说话人训练子集：
+
+```bash
+python scripts/prepare_commonvoice17.py \
+  --root data/raw/commonvoice17-zhcn-validation \
+  --output-root data/processed/commonvoice17-train \
+  --split-root outputs/commonvoice17
+```
+
+完成后目录应为：
 
 ```text
 data/
@@ -106,6 +159,8 @@ data/
 └── raw/
     └── childmandarin/train/
 ```
+
+### 5. 自行训练
 
 先检查数据、权重和训练命令：
 
