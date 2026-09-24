@@ -1,8 +1,21 @@
-# IFLYTEK Complex-Scenario Speaker Verification 2026
+<h1 align="center">IFLYTEK ComplexScenarioSpeakerVerification2026: Solution</h1>
 
-“声纹迷雾”复杂场景说话人确认挑战赛解决方案
+<p align="center"><strong>“声纹迷雾”复杂场景说话人确认挑战赛</strong></p>
 
-[English](README_EN.md) · [方法说明](docs/METHOD.md) · [模型权重](https://pan.baidu.com/s/1Jz5MlxJOKvoUdZkTl5n9oA?pwd=qndz)
+<p align="center">
+  <a href="README_EN.md">English</a> |
+  <a href="README.md">简体中文</a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.8-3776AB?logo=python&logoColor=white" alt="Python 3.8">
+  <img src="https://img.shields.io/badge/PyTorch-2.4.1-EE4C2C?logo=pytorch&logoColor=white" alt="PyTorch 2.4.1">
+  <img src="https://img.shields.io/badge/Semifinal%20LB-93.40746-7B3FC6" alt="Semifinal leaderboard score 93.40746">
+  <img src="https://img.shields.io/badge/Embedding-4096D-2EA44F" alt="4096-dimensional embedding">
+  <img src="https://img.shields.io/badge/License-MIT-1683BB" alt="MIT License">
+</p>
+
+---
 
 ## 简介
 
