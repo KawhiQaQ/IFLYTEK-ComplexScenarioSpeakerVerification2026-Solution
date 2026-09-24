@@ -35,6 +35,12 @@ def main() -> None:
 
     shutil.copytree(checkpoint_source, ROOT / "checkpoints", dirs_exist_ok=True)
     shutil.copytree(release_source, ROOT / "artifacts/releases", dirs_exist_ok=True)
+    runtime_readme_path = ROOT / "inference/r59/README.md"
+    runtime_readme = (
+        runtime_readme_path.read_bytes()
+        if runtime_readme_path.is_file()
+        else None
+    )
     with tempfile.TemporaryDirectory(prefix="miwu-weights-") as temporary:
         stage = Path(temporary)
         with tarfile.open(archive_source, "r:gz") as archive:
@@ -43,6 +49,8 @@ def main() -> None:
         if len(roots) != 1:
             raise RuntimeError("Unexpected model archive layout")
         shutil.copytree(roots[0], ROOT / "inference/r59", dirs_exist_ok=True)
+    if runtime_readme is not None:
+        runtime_readme_path.write_bytes(runtime_readme)
     print("weights_installed=" + str(ROOT))
     print("model_sha256=" + EXPECTED_SHA256)
 
